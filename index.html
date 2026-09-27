@@ -55,6 +55,7 @@ body.guide-on .guide{display:flex}
 .bar i{display:block;height:100%;width:0;background:var(--accent)}
 .endnote{color:var(--muted);font-size:13px;padding:4px 2px 10px}
 .status{font-size:13px;color:var(--muted);min-height:18px}
+.meta{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 
 /* çekim modu */
 .pband,.shootbar,.cleanexit{display:none}
@@ -122,6 +123,7 @@ body.clean.showexit .cleanexit{display:block}
       <button id="bClean">Temiz görüntü</button>
     </div>
     <div class="status" id="status"></div>
+    <div class="meta"><span id="tc"></span><span id="sn"></span></div>
     <div class="plist" id="plist"></div>
   </div>
 </div>
@@ -555,7 +557,7 @@ function mdBold(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
 const plist = $('plist');
 plist.innerHTML = LINES.map((L, i) => `<div class="pi" data-i="${i}"><div class="pn">${i + 1}. ${L.name} · ${fmt(L.sp)} sn konuşma</div>
   <div class="note">${esc(L.note)}</div><div class="ptxt">${mdBold(L.text)}</div><div class="bar"><i></i></div></div>`).join('') +
-  '<div class="endnote">Geçişten sonra ilk satır gelir, cümle oraya bağlanıyor.</div>';
+  '<div class="endnote">Geçişten sonra ilk satır gelir: "Bir fon beş yılda…" Cümle oraya bağlanıyor.</div>';
 const PI = [...plist.querySelectorAll('.pi')];
 PI.forEach(el => el.addEventListener('click', () => seek(ST[+el.dataset.i])));
 
@@ -588,6 +590,8 @@ function updateList(tl) {
     lastLine = tl.i;
   }
   PI[tl.i].querySelector('.bar i').style.width = (tl.hold ? tl.x * 100 : 100) + '%';
+  $('tc').textContent = 'Tur ' + (Math.floor(S.abs / P) + 1) + ', ' + fmt(mod(S.abs, P)) + ' / ' + fmt(P) + ' sn';
+  $('sn').textContent = LINES[tl.i].name + ' sahnesi';
 }
 function groupHTML(L, gi, cur) { return L.groups[gi].map(j => j === cur ? `<span class="cur">${esc(L.words[j].w)}</span>` : esc(L.words[j].w)).join(' '); }
 function firstWords(L, n) { return L.words.slice(0, n).map(o => o.w).join(' ') + ' …'; }
