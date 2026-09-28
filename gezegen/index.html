@@ -36,8 +36,10 @@ button[aria-pressed="true"]{outline:2px solid var(--fg);outline-offset:-2px}
 .guide{position:absolute;left:3%;top:63%;width:42%;height:28%;border:2px dashed rgba(255,255,255,.75);border-radius:14px;
   display:none;align-items:flex-end;justify-content:center;color:#fff;font-size:12px;padding:6px;text-shadow:0 1px 2px #000}
 body.guide-on .guide{display:flex}
-#cam{position:absolute;left:3%;top:63%;width:42%;height:28%;object-fit:cover;transform:scaleX(-1);
-  border-radius:14px;border:2px solid rgba(255,255,255,.9);display:none;background:#111}
+#cam{position:absolute;left:3%;top:63%;width:28%;height:28%;object-fit:cover;transform:scaleX(-1);
+  border-radius:14px;border:2px solid rgba(255,255,255,.9);display:none;background:#111;transition:top .3s,width .3s,height .3s}
+/* kayıt dışında büyük önizleme: kadrajı ayarlamak için; kutu 9:16, kaydedilen dikey dosyayla birebir aynı alanı gösterir */
+body.shoot:not(.recording) #cam{top:13%;width:60%;height:60%}
 
 .panel{display:flex;flex-direction:column;min-height:0;min-width:0;gap:14px}
 .head h1{font-size:22px;margin:0 0 4px;font-weight:700}
@@ -560,7 +562,7 @@ function setBand(main, sub, prog) {
 }
 function updateBand(tl, now) {
   const L = LINES[tl.i];
-  if (S.shoot === 'idle') { setBand('Hazır olunca Çekime başla.', 'Kayıt tam ' + fmt(P) + ' saniye sürer ve kendiliğinden durur.', null); }
+  if (S.shoot === 'idle') { setBand('Büyük kutuda kadrajını ayarla, sonra Çekime başla.', 'Kayıt dikey, tam ' + fmt(P) + ' saniye sürer ve kendiliğinden durur.', null); }
   else if (S.shoot === 'countdown') { const n = Math.max(1, 3 - Math.floor((now - S.cdStart) / 1000)); setBand(String(n), esc(firstWords(LINES[0], 5)), null); }
   else if (S.shoot === 'done') { setBand('Kayıt bitti.', 'Kamera kaydını kaydet ya da tekrar çek.', null); }
   else if (!tl.hold) { setBand('Geçiş, sus', esc(firstWords(LINES[(tl.i + 1) % LINES.length], 4)), null); }
@@ -683,7 +685,7 @@ async function enterShoot() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { toast('Bu tarayıcı kameraya erişemiyor. Sayfayı https üzerinden Safari ya da Chrome ile aç.'); return; }
   try {
     S.camStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user', width: { ideal: 1080 }, height: { ideal: 1920 } },
+      video: { facingMode: 'user', width: { ideal: 1080 }, height: { ideal: 1920 }, aspectRatio: { ideal: 9 / 16 } },
       audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
     const v = $('cam'); v.srcObject = S.camStream; v.muted = true; await v.play().catch(() => {});
   } catch (e) {
@@ -702,17 +704,39 @@ $('bRec').onclick = () => {
   if (S.shoot === 'rec') return stopRec();
   if (S.shoot === 'countdown') return;
   if (!S.camStream) { toast('Önce kameraya izin vermelisin. Hazırlığa dönüp tekrar çekim moduna geç.'); return; }
-  try { S.camRec = makeRecorder(S.camStream, 10e6); } catch (e) { toast(e.message); return; }
+  if (S.comp) S.comp.stop();
+  S.comp = camComposer();
+  try { S.camRec = makeRecorder(S.comp.stream, 10e6); } catch (e) { toast(e.message); return; }
   const chunks = [];
   S.camRec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
   S.camRec.onstop = () => {
     S.camBlob = new Blob(chunks, { type: S.camRec.mimeType || chunks[0]?.type || 'video/webm' });
     $('bSaveCam').hidden = false;
+    if (S.comp) { S.comp.stop(); S.comp = null; }
   };
   S.camBlob = null; $('bSaveCam').hidden = true;
   S.shoot = 'countdown'; S.cdStart = performance.now(); seek(0);
   document.body.classList.add('recording'); $('bRec').textContent = 'Kaydı durdur'; $('bRec').className = 'rec';
 };
+/* kamera görüntüsünü her zaman dikey (1080x1920) kaydet: telefon kamerayı yatay verse bile
+   ortadaki 9:16 alan kırpılır; önizleme kutusu da aynı alanı gösterir */
+function camComposer() {
+  const v = $('cam'), cv = document.createElement('canvas'); cv.width = 1080; cv.height = 1920;
+  const cx = cv.getContext('2d'); let on = true;
+  const draw = () => {
+    if (!on) return;
+    const vw = v.videoWidth, vh = v.videoHeight;
+    if (vw && vh) {
+      let sx = 0, sy = 0, sw = vw, sh = vh;
+      if (vw / vh > 9 / 16) { sw = vh * 9 / 16; sx = (vw - sw) / 2; } else { sh = vw * 16 / 9; sy = (vh - sh) / 2; }
+      cx.drawImage(v, sx, sy, sw, sh, 0, 0, 1080, 1920);
+    }
+    requestAnimationFrame(draw);
+  };
+  draw();
+  const stream = new MediaStream([...cv.captureStream(30).getVideoTracks(), ...S.camStream.getAudioTracks()]);
+  return { stream, stop() { on = false; stream.getVideoTracks().forEach(t => t.stop()); } };
+}
 function beginRec(now) { S.camRec.start(1000); S.recStart = now; S.shoot = 'rec'; S.abs = 0; }
 function stopRec() {
   if (S.camRec && S.camRec.state !== 'inactive') S.camRec.stop();
