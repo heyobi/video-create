@@ -11,11 +11,11 @@
 
 1. Sayfayı aç, **Animasyonu oluştur (1 tur)** düğmesine dokun. Hazırlık 50 saniye sürer; bu sırada ekranı kapatma, sekmeden çıkma.
 2. Düğme **Animasyonu kaydet** olunca dokun. iPhone'da paylaşım sayfasından "Videoyu Kaydet" ile galeriye gider (`animasyon.mp4`).
-3. **Çekim moduna geç (kamera)**. Kayıttan önce ön kamera büyük, dikey bir kutuda görünür; kadrajını buna göre ayarla. Kutuda gördüğün alan, kaydedilecek dikey dosyayla birebir aynıdır. Kayıt başlayınca kutu sol alttaki anlatıcı köşesine küçülür. Prompter ekranın tepesindedir; "Prompter: tam metin / ipucu" ile iki görünüm arasında geçilir.
+3. **Çekim moduna geç (kamera)**. Kayıttan önce ön kamera büyük, dikey bir kutuda görünür; kadrajını buna göre ayarla. Kutuda kameranın tam kadrajı, kırpılmadan görünür. Kayıt başlayınca kutu sol alttaki anlatıcı köşesine küçülür. Prompter ekranın tepesindedir; "Prompter: tam metin / ipucu" ile iki görünüm arasında geçilir.
 4. **Çekime başla**. 3 saniyelik geri sayım biter bitmez kayıt ve animasyon aynı anda başlar, tam 50,0 saniyede kayıt kendiliğinden durur.
 5. **Kamera kaydını kaydet** ile `kamera.mp4` dosyasını galeriye al. Beğenmediysen **Tekrar çek**.
 
-Kamera kaydı her zaman dikey (1080x1920) çıkar. Telefon kamerayı yatay verse bile görüntünün ortasındaki 9:16 alan kaydedilir. Kaydedilen dosya aynalı değildir; önizleme ise ön kamera alışkanlığına uygun olarak aynalı gösterilir.
+Kamera görüntüsü kırpılmadan, tam kadraj kaydedilir (ön kameradan 3:4, 1440x1920 istenir). Telefon dik tutulduğunda dosya dikey çıkar. Kadraj ve kırpma Edits'te yapılır. Kaydedilen dosya aynalı değildir; önizleme ise ön kamera alışkanlığına uygun olarak aynalı gösterilir.
 
 ## Edits'te birleştirme
 
