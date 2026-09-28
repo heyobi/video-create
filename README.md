@@ -73,7 +73,8 @@ Metin, zaferi getirenin eklenen ağ olduğunu açıkça söyler; bunu sineğin k
 
 Bu video, diğer iki videodan farklı olarak gerçek görüntüler de kullanır. Görüntüler `sinek/assets/` klasöründedir ve flysoul reposundan alınmıştır:
 
-- `a_*.jpg` ve `v_*.jpg`: Gerçek oyun kaydının (`media/victory_3b_1x_2026-09-19.mp4`) başından ve sonundan 8'er saniye, saniyede 8 kare. Sonundaki kareler, ek ağla kazanılan dövüşün zafer anıdır.
-- `b_*.jpg`: FlySoul görselleştiricisinin kaydı (`media/flysoul_brain_sleep.gif`). Modellenen devre, gerçek MaleCNS nöron şekilleri üzerinde çiziliyor. Nöron şekilleri MaleCNS'ten alınmıştır, lisansı CC-BY.
+- `gundyr_dik.jpg` ve `gundyr_genis.jpg`: Aynı kaydın 17,2. saniyesinden alınmış Gundyr karesi. Oyun arayüzü dışarıda kalacak şekilde kırpıldı; sayfada renk ve kenar karartmasıyla sinematik bir görünüm veriliyor. Açılışta ve kapanışta kullanılıyor. Durağan bir kare olduğu için döngü noktasında kesme oluşmuyor.
+- `v_*.jpg`: Gerçek oyun kaydının (`media/victory_3b_1x_2026-09-19.mp4`) son 8 saniyesi, saniyede 8 kare. Bu, ek ağla kazanılan dövüşün zafer anı. "Beyne bir ek" sahnesine girildiğinde baştan başlıyor ve bir kez oynuyor.
+- `b_*.jpg`: FlySoul görselleştiricisinin kaydından (`media/flysoul_brain_sleep.gif`) "dreaming" (uyku tekrarı) bölümü, 21 kare. Kareler ileri geri oynatılıyor. Arka plan tam siyaha çekildi ve kenarlar yumuşatıldı; görsel eklemeli karışımla çizildiği için sahneye kenar izi bırakmadan karışıyor. Modellenen devre, gerçek MaleCNS nöron şekilleri üzerinde çiziliyor. Nöron şekilleri MaleCNS'ten alınmıştır, lisansı CC-BY.
 
 Kareler, pencere çubuğu ve arayüz yazıları kırpılarak `ffmpeg` ile çıkarıldı.

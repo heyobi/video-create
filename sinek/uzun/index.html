@@ -215,34 +215,53 @@ function lockOn(c, x, y, r) {
 /* repodaki gerçek görüntüler (heyobi/flysoul) */
 const ASSET = '../assets/';
 function seq(prefix, n) { const a = []; for (let i = 0; i < n; i++) { const im = new Image(); im.src = ASSET + prefix + String(i).padStart(3, '0') + '.jpg'; a.push(im); } return a; }
-const CLIP_A = seq('a_', 64), CLIP_V = seq('v_', 64), BRAIN = seq('b_', 48);
-const ASSETS_READY = Promise.all([...CLIP_A, ...CLIP_V, ...BRAIN].map(im => im.decode().catch(() => {})));
+const HERO = new Image(); HERO.src = ASSET + 'gundyr_genis.jpg';
+const CLIP_V = seq('v_', 64), BRAIN = seq('b_', 21);
+const ASSETS_READY = Promise.all([HERO, ...CLIP_V, ...BRAIN].map(im => im.decode().catch(() => {})));
+/* oyuncunun kendi kaydından Gundyr karesi, sinematik renk ve kenar karartmasıyla */
+function heroShot(c, x, y, w, alpha) {
+  const h = w * 360 / 600;
+  c.save(); c.globalAlpha = alpha; drawImg(c, HERO, x, y, w, h);
+  c.globalCompositeOperation = 'overlay'; c.fillStyle = 'rgba(224,123,57,.45)'; c.fillRect(x, y, w, h);
+  c.globalCompositeOperation = 'source-over';
+  const v = c.createRadialGradient(x + w * .4, y + h * .35, h * .2, x + w * .5, y + h * .5, w * .6);
+  v.addColorStop(0, 'rgba(10,6,6,0)'); v.addColorStop(1, 'rgba(10,6,6,.85)'); c.fillStyle = v; c.fillRect(x, y, w, h);
+  c.restore();
+  glow(c, x + w * .317, y + h * .09, w * .05, '255,110,40', (.35 + .1 * osc(25)) * alpha);
+  return h;
+}
+/* zafer kaydı, sahneye varıldığı anda baştan başlar ve bir kez oynar */
+const victoryFrame = () => CLIP_V[S.si === 8 ? Math.min(63, Math.floor(S.holdT * 8)) : S.si === 7 ? 0 : 63];
 const frameOf = (arr, fps) => arr[Math.floor(TT * fps) % arr.length];
+/* uyku tekrarı (dreaming) kareleri, ileri geri oynar */
+const brainFrame = () => BRAIN[(i => i < 21 ? i : 40 - i)(Math.floor(TT * 8.33) % 40)];
 function drawImg(c, im, x, y, w, h) {
   if (im && im.complete && im.naturalWidth) c.drawImage(im, x, y, w, h);
   else { c.fillStyle = '#111'; c.fillRect(x, y, w, h); }
 }
-function gamePanel(c, arr, x, y, w, cap) {
+function gamePanel(c, im, x, y, w, cap) {
   const h = w * 272 / 480;
   box(c, x - .08, y - .08, w + .16, h + .16, .12, '#000', 'rgba(255,255,255,.35)', .03);
-  c.save(); c.beginPath(); rrp(c, x, y, w, h, .08); c.clip(); drawImg(c, frameOf(arr, 8), x, y, w, h); c.restore();
+  c.save(); c.beginPath(); rrp(c, x, y, w, h, .08); c.clip(); drawImg(c, im, x, y, w, h); c.restore();
   if (cap) { disc(c, x + .25, y + .3, .08, '#ff3b30'); T(c, cap, x + .42, y + .38, .22, '#fff', { w: 700 }); }
   return h;
 }
 const SC = [
 /* s0 arena */
-{ name:'Arena', p:{ k:'c', c:[-1.2,0.9], r:0.5 }, draw(c){
-  c.fillStyle = lg(c,0,-4.5,0,4.5,[[0,'#120f12'],[.6,'#3b2f28'],[1,'#1d1815']]); c.fillRect(-8,-4.5,16,9);
-  glow(c,3.5,-.5,6,'224,123,57',.2);
-  c.fillStyle = '#1a1614'; [[-8,-3,1.2,7],[6.8,-4.5,1.2,8]].forEach(([x,y,w,h]) => c.fillRect(x,y,w,h));
-  c.fillStyle = '#2b2521'; c.fillRect(-8,2.6,16,1.9);
-  for (let i = 0; i < 40; i++) { const y = 3 - ((TT*.12 + rnd(i)) % 1) * 7.5; disc(c,-8+rnd(i+9)*16,y,.03,`rgba(255,150,70,${.3+.4*rnd(i+3)})`); }
-  gamePanel(c,CLIP_A,0,-2.5,6.6,'gerçek kayıt');
+{ name:'Arena', p:{ k:'c', c:[3.6,0.3], r:0.45 }, draw(c){
+  c.fillStyle = '#1a1513'; c.fillRect(-8,-4.5,16,9);
+  const x = -.8, y = -3.5, w = 8.8, h = heroShot(c,x,y,w,1);
+  c.fillStyle = lg(c,x,0,x+2.4,0,[[0,'#1a1513'],[1,'rgba(26,21,19,0)']]); c.fillRect(x-.01,y,2.4,h);
+  c.fillStyle = lg(c,0,y,0,y+1.0,[[0,'#1a1513'],[1,'rgba(26,21,19,0)']]); c.fillRect(x,y-.01,w,1.0);
+  c.fillStyle = lg(c,0,y+h*.6,0,y+h,[[0,'rgba(26,21,19,0)'],[1,'#1a1513']]); c.fillRect(x,y+h*.6,w,h*.41);
+  for (let i = 0; i < 50; i++) { const yy = 3 - ((TT*.12 + rnd(i)) % 1) * 8; disc(c,-8+rnd(i+9)*16,yy,.03,`rgba(255,150,70,${.3+.4*rnd(i+3)})`); }
   T(c,'Bir sinek beyni',-6.1,-2.6,.75,PAPER,{w:700});
   T(c,'Dark Souls III oynuyor',-6.1,-1.95,.44,EMBER,{w:700,max:5.8});
   T(c,'Karşısında: Iudex Gundyr',-6.1,-1.35,.26,DIM,{w:600});
-  lockOn(c,-1.2,.9,.5);
-  disc(c,-1.2,.9,.5,'#2b2521');
+  T(c,'gerçek oyun kaydından',-6.1,-1.0,.2,DIM,{w:500});
+  lockOn(c,3.6,.3,.45);
+  T(c,'kontrolde: sinek beyni',3.6,1.35,.24,'#fff',{w:700,a:'center'});
+  disc(c,3.6,.3,.45,'#2b2521');
 }},
 /* s1 sinek */
 { name:'Sinek', p:{ k:'c', c:[3.0,-1.05], r:0.34 }, draw(c){
@@ -258,8 +277,8 @@ const SC = [
 /* s2 harita */
 { name:'Harita', p:{ k:'c', c:[2.75,-1.8], r:0.5 }, draw(c){
   c.fillStyle = '#05070f'; c.fillRect(-8,-4.5,16,9);
-  const h = 6.2, w = h * 292 / 380, x = 2.75 - w/2, y = -3.05;
-  c.save(); c.beginPath(); c.ellipse(x + w/2, y + h/2, w/2, h/2, 0, 0, TAU); c.clip(); c.globalCompositeOperation = 'lighter'; const im = frameOf(BRAIN,6); drawImg(c, im, x, y, w, h); c.globalAlpha = .6; drawImg(c, im, x, y, w, h); c.restore();
+  const h = 6.2, w = h * 292 / 360, x = 2.75 - w/2, y = -3.05;
+  c.save(); c.globalCompositeOperation = 'lighter'; const im = brainFrame(); drawImg(c, im, x, y, w, h); c.globalAlpha = .6; drawImg(c, im, x, y, w, h); c.restore();
   glow(c,2.75,-1.8,1.1,'232,195,106',.3); disc(c,2.75,-1.8,.6,null,GOLD,.05);
   T(c,'MaleCNS v1.0',-6.1,-2.6,.75,PAPER,{w:700});
   T(c,'166.700 nöron',-6.1,-1.95,.44,CYAN,{w:700});
@@ -377,7 +396,7 @@ const SC = [
   L.slice(1).forEach(([x,ys]) => ys.forEach(y => disc(c,x,y,.12,MAG)));
   glow(c,4.6,-1.4,.9,'216,79,216',.4); disc(c,4.6,-1.4,.52,null,MAG,.04);
   T(c,'beynin dışındaki ağ',5.5,-2.9,.22,MAG,{w:700,a:'center'});
-  gamePanel(c,CLIP_V,.4,.6,5.0,'gerçek kayıt: ek ağla kazanılan dövüş');
+  gamePanel(c,victoryFrame(),.4,.6,5.0,'gerçek kayıt: ek ağla kazanılan dövüş');
   T(c,'Beyne bir ek',-6.1,-2.6,.6,PAPER,{w:700,max:5.6});
   T(c,'Aynı oyun bilgisini okuyan yapay ağ',-6.1,-2.0,.26,DIM,{w:500});
   T(c,'Son 1.800 dövüşte yüzde 28 ile 32',-6.1,-1.55,.3,MAG,{w:700,max:5.6});
@@ -385,9 +404,14 @@ const SC = [
 }},
 /* s9 kapanış */
 { name:'Soru', p:{ k:'c', c:[4.8,0.35], r:0.36 }, draw(c){
-  c.fillStyle = lg(c,0,-4.5,0,4.5,[[0,'#120f12'],[1,'#2b2230']]); c.fillRect(-8,-4.5,16,9);
+  c.fillStyle = '#1c1720'; c.fillRect(-8,-4.5,16,9);
+  const hx = -.2, hy = -3.9, hw = 8.2, hh = heroShot(c,hx,hy,hw,.6);
+  c.fillStyle = lg(c,hx,0,hx+2.4,0,[[0,'#1c1720'],[1,'rgba(28,23,32,0)']]); c.fillRect(hx-.01,hy,2.4,hh);
+  c.fillStyle = lg(c,0,hy,0,hy+1.0,[[0,'#1c1720'],[1,'rgba(28,23,32,0)']]); c.fillRect(hx,hy-.01,hw,1.0);
+  c.fillStyle = lg(c,0,hy+hh*.5,0,hy+hh,[[0,'rgba(28,23,32,0)'],[1,'#1c1720']]); c.fillRect(hx,hy+hh*.5,hw,hh*.51);
   const n = TW(c,'Harita yetmiyor. Asıl soru: beyin nasıl öğrenir?',-6.1,-2.6,.56,PAPER,6.0,1.15,{w:700});
   T(c,'github.com/heyobi/flysoul',-6.1,-2.6+n*.64+.15,.26,DIM,{w:500});
+  T(c,'Gundyr hâlâ bekliyor',-6.1,-2.6+n*.64+.6,.3,EMBER,{w:700});
   c.save(); c.translate(2.4,.3);
   c.beginPath(); c.moveTo(-2.4,.2); c.bezierCurveTo(-2.9,2.8,-2.0,3.6,-1.2,2.7); c.lineTo(-.4,2.0); c.lineTo(1.2,2.0); c.lineTo(2.0,2.7);
   c.bezierCurveTo(2.8,3.6,3.7,2.8,3.2,.2); c.bezierCurveTo(3.0,-.8,2.2,-.9,1.6,-.6); c.lineTo(-.8,-.6); c.bezierCurveTo(-1.4,-.9,-2.2,-.8,-2.4,.2); c.closePath();
