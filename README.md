@@ -69,4 +69,11 @@ Shorts sekiz sahneli ve döngü 55,8 saniye. Hikâye şu sırayla ilerler:
 1. Sinek yaklaşık 5.200 dövüşte 8 kez kazandı ve öğrenme eğrisi düz kaldı: sineğin beyni yetmedi.
 2. Beynin yanına küçük bir yapay ağ eklendi. Bu ağ aynı oyun bilgisini okuyup kararı verdi ve dövüşlerin üçte birini kazandı.
 
-Metin, zaferi getirenin eklenen ağ olduğunu açıkça söyler; bunu sineğin kendi öğrenmesi gibi anlatmaz. Boss çizimi, oyundaki karakterin birebir kopyası değil; genel bir silüettir.
+Metin, zaferi getirenin eklenen ağ olduğunu açıkça söyler; bunu sineğin kendi öğrenmesi gibi anlatmaz.
+
+Bu video, diğer iki videodan farklı olarak gerçek görüntüler de kullanır. Görüntüler `sinek/assets/` klasöründedir ve flysoul reposundan alınmıştır:
+
+- `a_*.jpg` ve `v_*.jpg`: Gerçek oyun kaydının (`media/victory_3b_1x_2026-09-19.mp4`) başından ve sonundan 8'er saniye, saniyede 8 kare. Sonundaki kareler, ek ağla kazanılan dövüşün zafer anıdır.
+- `b_*.jpg`: FlySoul görselleştiricisinin kaydı (`media/flysoul_brain_sleep.gif`). Modellenen devre, gerçek MaleCNS nöron şekilleri üzerinde çiziliyor. Nöron şekilleri MaleCNS'ten alınmıştır, lisansı CC-BY.
+
+Kareler, pencere çubuğu ve arayüz yazıları kırpılarak `ffmpeg` ile çıkarıldı.

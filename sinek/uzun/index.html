@@ -212,28 +212,35 @@ function lockOn(c, x, y, r) {
   disc(c, x, y, r * 1.24, null, 'rgba(255,255,255,.85)', .04);
   for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + TT * .5; c.beginPath(); c.moveTo(x + r * 1.44 * Math.cos(a), y + r * 1.44 * Math.sin(a)); c.lineTo(x + r * 1.8 * Math.cos(a), y + r * 1.8 * Math.sin(a)); c.strokeStyle = '#fff'; c.lineWidth = .05; c.stroke(); }
 }
+/* repodaki gerçek görüntüler (heyobi/flysoul) */
+const ASSET = '../assets/';
+function seq(prefix, n) { const a = []; for (let i = 0; i < n; i++) { const im = new Image(); im.src = ASSET + prefix + String(i).padStart(3, '0') + '.jpg'; a.push(im); } return a; }
+const CLIP_A = seq('a_', 64), CLIP_V = seq('v_', 64), BRAIN = seq('b_', 48);
+const ASSETS_READY = Promise.all([...CLIP_A, ...CLIP_V, ...BRAIN].map(im => im.decode().catch(() => {})));
+const frameOf = (arr, fps) => arr[Math.floor(TT * fps) % arr.length];
+function drawImg(c, im, x, y, w, h) {
+  if (im && im.complete && im.naturalWidth) c.drawImage(im, x, y, w, h);
+  else { c.fillStyle = '#111'; c.fillRect(x, y, w, h); }
+}
+function gamePanel(c, arr, x, y, w, cap) {
+  const h = w * 272 / 480;
+  box(c, x - .08, y - .08, w + .16, h + .16, .12, '#000', 'rgba(255,255,255,.35)', .03);
+  c.save(); c.beginPath(); rrp(c, x, y, w, h, .08); c.clip(); drawImg(c, frameOf(arr, 8), x, y, w, h); c.restore();
+  if (cap) { disc(c, x + .25, y + .3, .08, '#ff3b30'); T(c, cap, x + .42, y + .38, .22, '#fff', { w: 700 }); }
+  return h;
+}
 const SC = [
 /* s0 arena */
 { name:'Arena', p:{ k:'c', c:[-1.2,0.9], r:0.5 }, draw(c){
   c.fillStyle = lg(c,0,-4.5,0,4.5,[[0,'#120f12'],[.6,'#3b2f28'],[1,'#1d1815']]); c.fillRect(-8,-4.5,16,9);
   glow(c,3.5,-.5,6,'224,123,57',.2);
-  c.fillStyle = '#1a1614'; [[-8,-3,1.2,7],[6.8,-4.5,1.2,8],[-.6,-2,.7,5]].forEach(([x,y,w,h]) => c.fillRect(x,y,w,h));
-  c.beginPath(); c.arc(.95,-2,1.55,Math.PI,0); c.lineWidth = .55; c.strokeStyle = '#1a1614'; c.stroke();
-  c.fillStyle = '#1a1614'; c.fillRect(2.2,-2,.7,5);
+  c.fillStyle = '#1a1614'; [[-8,-3,1.2,7],[6.8,-4.5,1.2,8]].forEach(([x,y,w,h]) => c.fillRect(x,y,w,h));
   c.fillStyle = '#2b2521'; c.fillRect(-8,2.6,16,1.9);
-  c.fillStyle = '#0d0b0a';
-  c.save(); c.translate(4.4,0); c.scale(.85,.85);
-  c.beginPath(); c.moveTo(-1.2,3.4); c.lineTo(-.9,.7); c.lineTo(-1.4,-.3); c.lineTo(-.8,-1.8); c.lineTo(0,-2.3); c.lineTo(.8,-1.8); c.lineTo(1.2,-.3);
-  c.lineTo(.9,.7); c.lineTo(1.2,3.4); c.lineTo(.5,3.4); c.lineTo(.1,1.3); c.lineTo(-.3,3.4); c.closePath(); c.fill();
-  disc(c,0,-2.65,.45,'#0d0b0a');
-  c.strokeStyle = '#0d0b0a'; c.lineWidth = .12; c.beginPath(); c.moveTo(-2,-4.3); c.lineTo(-1,2.8); c.stroke();
-  glow(c,-.15,-2.7,.3,'255,120,40',.9); glow(c,.15,-2.7,.3,'255,120,40',.9);
-  c.restore();
   for (let i = 0; i < 40; i++) { const y = 3 - ((TT*.12 + rnd(i)) % 1) * 7.5; disc(c,-8+rnd(i+9)*16,y,.03,`rgba(255,150,70,${.3+.4*rnd(i+3)})`); }
+  gamePanel(c,CLIP_A,0,-2.5,6.6,'gerçek kayıt');
   T(c,'Bir sinek beyni',-6.1,-2.6,.75,PAPER,{w:700});
-  T(c,'Dark Souls III oynuyor',-6.1,-1.95,.44,EMBER,{w:700});
-  T(c,'Iudex Gundyr',-6.1,-1.35,.24,DIM,{w:600});
-  box(c,-6.1,-1.2,5.2,.16,.05,'rgba(0,0,0,.6)'); box(c,-6.1,-1.2,5.2*.72,.16,.05,'#9e2a22');
+  T(c,'Dark Souls III oynuyor',-6.1,-1.95,.44,EMBER,{w:700,max:5.8});
+  T(c,'Karşısında: Iudex Gundyr',-6.1,-1.35,.26,DIM,{w:600});
   lockOn(c,-1.2,.9,.5);
   disc(c,-1.2,.9,.5,'#2b2521');
 }},
@@ -249,25 +256,16 @@ const SC = [
   T(c,'Google Research ve HHMI Janelia, Eylül 2026',-6.1,-1.12,.24,'#5a5266',{w:500});
 }},
 /* s2 harita */
-{ name:'Harita', p:{ k:'c', c:[2.8,-0.5], r:0.5 }, draw(c){
-  c.fillStyle = '#070a14'; c.fillRect(-8,-4.5,16,9);
-  const shapes = [[2.2,.3,2.4,1.8],[-.9,.3,.9,1.5],[5.3,.3,.9,1.5]];
-  c.save(); c.beginPath(); shapes.forEach(([x,y,a,b]) => { c.moveTo(x+a,y); c.ellipse(x,y,a,b,0,0,TAU); }); c.clip();
-  c.fillStyle = 'rgba(90,209,230,.06)'; c.fillRect(-2,-2,9,5);
-  const cols = ['90,209,230','216,79,216','224,123,57','94,224,143'];
-  for (let i = 0; i < 200; i++) { const x0 = -1.8+rnd(i)*8, y0 = -1.5+rnd(i+1)*3.6, x1 = -1.8+rnd(i+2)*8, y1 = -1.5+rnd(i+3)*3.6;
-    c.beginPath(); c.moveTo(x0,y0); c.bezierCurveTo(x0+(rnd(i+4)-.5)*3,y0-1,x1+(rnd(i+5)-.5)*3,y1+1,x1,y1);
-    c.strokeStyle = `rgba(${cols[i%4]},${.12+.18*rnd(i+6)})`; c.lineWidth = .02; c.stroke(); }
-  for (let i = 0; i < 260; i++) disc(c,-1.9+rnd(i+700)*8.2,-1.5+rnd(i+800)*3.6,.025,`rgba(255,255,255,${.25+.5*rnd(i+900)*(.6+.4*Math.sin(TT*2+i))})`);
-  c.restore();
-  shapes.forEach(([x,y,a,b]) => { c.beginPath(); c.ellipse(x,y,a,b,0,0,TAU); c.strokeStyle = 'rgba(90,209,230,.55)'; c.lineWidth = .04; c.stroke(); });
-  glow(c,2.8,-.5,1.1,'232,195,106',.35); disc(c,2.8,-.5,.6,null,GOLD,.05);
-  T(c,'mantar cisimciği',2.8,-1.3,.24,GOLD,{w:700,a:'center'});
-  T(c,'optik lob',-.9,-1.4,.22,DIM,{w:600,a:'center'});
+{ name:'Harita', p:{ k:'c', c:[2.75,-1.8], r:0.5 }, draw(c){
+  c.fillStyle = '#05070f'; c.fillRect(-8,-4.5,16,9);
+  const h = 6.2, w = h * 292 / 380, x = 2.75 - w/2, y = -3.05;
+  c.save(); c.beginPath(); c.ellipse(x + w/2, y + h/2, w/2, h/2, 0, 0, TAU); c.clip(); c.globalCompositeOperation = 'lighter'; const im = frameOf(BRAIN,6); drawImg(c, im, x, y, w, h); c.globalAlpha = .6; drawImg(c, im, x, y, w, h); c.restore();
+  glow(c,2.75,-1.8,1.1,'232,195,106',.3); disc(c,2.75,-1.8,.6,null,GOLD,.05);
   T(c,'MaleCNS v1.0',-6.1,-2.6,.75,PAPER,{w:700});
   T(c,'166.700 nöron',-6.1,-1.95,.44,CYAN,{w:700});
   T(c,'125 milyon sinaps',-6.1,-1.45,.32,PAPER,{w:600});
   T(c,'Cell, 2026',-6.1,-1.05,.24,DIM,{w:500});
+  TW(c,'Görüntü: FlySoul görselleştiricisi. Devre, gerçek MaleCNS nöron şekilleri üzerinde çiziliyor (CC-BY).',-6.1,-.6,.18,DIM,5.4,1.3,{w:500});
 }},
 /* s3 tek nöron */
 { name:'Nöron', p:{ k:'c', c:[5.2,-0.9], r:0.42 }, draw(c){
@@ -379,9 +377,7 @@ const SC = [
   L.slice(1).forEach(([x,ys]) => ys.forEach(y => disc(c,x,y,.12,MAG)));
   glow(c,4.6,-1.4,.9,'216,79,216',.4); disc(c,4.6,-1.4,.52,null,MAG,.04);
   T(c,'beynin dışındaki ağ',5.5,-2.9,.22,MAG,{w:700,a:'center'});
-  const rounds = [.2,2,5.8,6.2,13.5,28,32,27.6,30];
-  rounds.forEach((w,i) => { const x = .2+i*.7, h = Math.max(.04,w*.07); box(c,x,2.6-h,.5,h,.05,MAG); });
-  T(c,'kazanma yüzdesi, eğitim turlarına göre',.2,2.95,.2,DIM,{w:600});
+  gamePanel(c,CLIP_V,.4,.6,5.0,'gerçek kayıt: ek ağla kazanılan dövüş');
   T(c,'Beyne bir ek',-6.1,-2.6,.6,PAPER,{w:700,max:5.6});
   T(c,'Aynı oyun bilgisini okuyan yapay ağ',-6.1,-2.0,.26,DIM,{w:500});
   T(c,'Son 1.800 dövüşte yüzde 28 ile 32',-6.1,-1.55,.3,MAG,{w:700,max:5.6});
@@ -507,7 +503,7 @@ window.addEventListener('keydown', e => {
   else if (e.key === 'c' || e.key === 'C') { if (S.clean) exitClean(); }
 });
 
-window.DONGU_UZUN = { SC, STEPS, renderScene, state: S, jump, next };
+window.DONGU_UZUN = { ready: ASSETS_READY, SC, STEPS, renderScene, state: S, jump, next };
 resize(); showStep(); requestAnimationFrame(frame);
 </script>
 </body>
