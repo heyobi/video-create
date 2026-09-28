@@ -4,6 +4,7 @@
 
 - `index.html`: Shorts/Reels çekim sayfası (9:16, 7 sahne, 50,0 saniyelik kusursuz döngü)
 - `uzun/index.html`: Yatay uzun video kurgu sayfası (16:9, 10 sahne, 14 anlatım adımı)
+- `gezegen/index.html` ve `gezegen/uzun/index.html`: Aynı format, ikinci video: bilinen en genç gezegen Elias 2-24 b
 
 ## Shorts çekim akışı (telefonda)
 
@@ -33,3 +34,22 @@ Boşluk, sağ ok, sahneye dokunma ya da **Sonraki** bir adım ilerletir; sol ok 
 ## İçerik notu
 
 Rakamlar 27 Eylül 2026 itibarıyla. Eski bakanla ilgili bütün bilgiler Yeni Parti Sözcüsü Zeynel Emre'nin **iddiası** olarak verilir; gerçek kişilerin görseli çizilmez.
+
+## Video 2: Bilinen en genç gezegen (`/gezegen/`)
+
+Konu: Eylül 2026'da doğrulanan Elias 2-24 b.
+
+- 1 milyon yaşından genç, 450 ışık yılı uzakta, Yılancı takımyıldızında.
+- Keck teleskobunun 2018 ve 2020 arşiv görüntülerinde bulundu.
+- Kütlesi Jüpiter'in 2 ila 4 katı.
+- Yıldızına yaklaşık 55 AB uzaklıkta, diskteki dar bir boşlukta duruyor.
+
+Çekim ve Edits akışı ilk videoyla aynı. Döngü cümlesi: "Ama her keşif aynı soruyla başlıyor: Bir gezegen kaç yaşında olabilir?"
+
+Kaynaklar:
+
+- NASA: "Newfound 'Baby' Planet Smashes Record for Youngest Known World"
+- W. M. Keck Gözlemevi: keckobservatory.org/elias224b
+- Diego Portales Üniversitesi (UDP) duyurusu
+- The Astrophysical Journal Letters makalesi
+- NASA Exoplanet Archive (6.300'den fazla ötegezegen)
