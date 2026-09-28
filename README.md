@@ -64,4 +64,9 @@ Bütün rakamlar projenin README'sindeki sonuç tablolarından alındı:
 - Sinek yaklaşık 5.200 dövüşte 8 kez kazandı ve öğrenme eğrisi düz kaldı.
 - Beynin dışında eğitilen sentetik ağ ("3b") son 1.800 dövüşün yüzde 28 ile 32'sini kazandı.
 
-Metin bu ikisini her yerde ayrı tutar: sentetik ağın başarısı, sineğin öğrenmesi olarak anlatılmaz. Boss çizimi, oyundaki karakterin birebir kopyası değil; genel bir silüettir.
+Shorts sekiz sahneli ve döngü 55,8 saniye. Hikâye şu sırayla ilerler:
+
+1. Sinek yaklaşık 5.200 dövüşte 8 kez kazandı ve öğrenme eğrisi düz kaldı: sineğin beyni yetmedi.
+2. Beynin yanına küçük bir yapay ağ eklendi. Bu ağ aynı oyun bilgisini okuyup kararı verdi ve dövüşlerin üçte birini kazandı.
+
+Metin, zaferi getirenin eklenen ağ olduğunu açıkça söyler; bunu sineğin kendi öğrenmesi gibi anlatmaz. Boss çizimi, oyundaki karakterin birebir kopyası değil; genel bir silüettir.

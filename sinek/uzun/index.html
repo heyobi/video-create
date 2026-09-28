@@ -106,8 +106,8 @@ const STEPS = [
    'Peki sinek kazanabildi mi? | Yaklaşık *5.200* dövüşte *8 kez* kazandı. | Kabaca her altı yüz dövüşte bir. || Ama asıl sonuç şu: öğrenme eğrisi *düz* kaldı.'],
   [7,'Aynı sahne. Teşhis, sakin ton.',
    'Neden? | Sinyal Kenyon hücrelerinde vardı, sinapslar da onu kısmen taşıyordu. | Ama ağırlıklar birikmedi; her elli dövüşte bir *ters yöne* salındı. || Sinek, fiilen yalnızca son yirmi dövüşünü hatırlıyordu.'],
-  [8,'Sentetik ağ. Bunun sineğin öğrenmesi olmadığını net söyle.',
-   'Sonra bir karşılaştırma yaptık. | Aynı duyu sinyalini, beynin *dışında* eğitilen bir ağa verdik. | Bu ağ son 1.800 dövüşün *yüzde 28 ile 32\'sini* kazandı. || Ama bu, sineğin öğrenmesi değil.'],
+  [8,'Beyne bir ek. Doruk noktası; kazananın eklenen ağ olduğunu net söyle.',
+   'Sineğin beyni yetmedi. | Biz de beynin yanına bir *ek* yaptık: | aynı oyun bilgisini okuyan, beynin *dışında* eğitilen küçük bir yapay ağ. | Sinek devresi çalışmaya devam etti ama kararı artık bu ağ verdi. | Sonuç: son 1.800 dövüşün *yüzde 28 ile 32\'si* zafer. || Yani boss\'u yenen, eklediğimiz ağ oldu.'],
   [8,'Aynı sahne. Sonucu yorumla.',
    'Bu şunu gösteriyor: | aynı bilgiyle oyunu kazanmak mümkün. || Sınır oyun değil, sineğin *öğrenme kuralı*.'],
   [9,'Kapanış sorusu. Yavaşla.',
@@ -366,12 +366,14 @@ const SC = [
   disc(c,5.6,1.9,.56,null,'#fff3cf',.04);
 }},
 /* s8 sentetik */
-{ name:'Sentetik', p:{ k:'c', c:[4.6,-1.4], r:0.45 }, draw(c){
+{ name:'Beyne ek', p:{ k:'c', c:[4.6,-1.4], r:0.45 }, draw(c){
   c.fillStyle = '#0a0812'; c.fillRect(-8,-4.5,16,9);
   c.beginPath(); c.ellipse(1.6,-1.4,1.5,1.1,0,0,TAU); c.strokeStyle = 'rgba(90,209,230,.7)'; c.lineWidth = .05; c.stroke();
   for (let i = 0; i < 40; i++) disc(c,.4+rnd(i)*2.4,-2.2+rnd(i+9)*1.6,.04,'rgba(90,209,230,.5)');
   T(c,'sinek devresi',1.6,-.05,.22,CYAN,{w:700,a:'center'});
-  arrowR(c,3.2,3.9,-1.4,'rgba(216,79,216,.8)');
+  T(c,'sinapslar donduruldu',1.6,.25,.18,DIM,{w:500,a:'center'});
+  T(c,'+',3.55,-1.15,.7,MAG,{w:700,a:'center'});
+  T(c,'oyun bilgisini okur',5.5,-.1,.2,DIM,{w:600,a:'center'});
   const L = [[4.6,[-1.4]],[5.6,[-2.4,-1.8,-1.2,-.6]],[6.5,[-2.1,-1.4,-.7]]];
   for (let a = 0; a < 2; a++) for (const y0 of L[a][1]) for (const y1 of L[a+1][1]) { c.beginPath(); c.moveTo(L[a][0],y0); c.lineTo(L[a+1][0],y1); c.strokeStyle = 'rgba(216,79,216,.35)'; c.lineWidth = .02; c.stroke(); }
   L.slice(1).forEach(([x,ys]) => ys.forEach(y => disc(c,x,y,.12,MAG)));
@@ -380,10 +382,10 @@ const SC = [
   const rounds = [.2,2,5.8,6.2,13.5,28,32,27.6,30];
   rounds.forEach((w,i) => { const x = .2+i*.7, h = Math.max(.04,w*.07); box(c,x,2.6-h,.5,h,.05,MAG); });
   T(c,'kazanma yüzdesi, eğitim turlarına göre',.2,2.95,.2,DIM,{w:600});
-  T(c,'Beynin dışında bir ağ',-6.1,-2.6,.6,PAPER,{w:700,max:5.6});
-  T(c,'Aynı duyu sinyaliyle eğitildi',-6.1,-2.0,.26,DIM,{w:500});
+  T(c,'Beyne bir ek',-6.1,-2.6,.6,PAPER,{w:700,max:5.6});
+  T(c,'Aynı oyun bilgisini okuyan yapay ağ',-6.1,-2.0,.26,DIM,{w:500});
   T(c,'Son 1.800 dövüşte yüzde 28 ile 32',-6.1,-1.55,.3,MAG,{w:700,max:5.6});
-  T(c,'Bu, sineğin öğrenmesi değil',-6.1,-1.1,.28,GOLD,{w:700});
+  T(c,'Boss\'u yenen, eklenen ağ',-6.1,-1.1,.28,GOLD,{w:700});
 }},
 /* s9 kapanış */
 { name:'Soru', p:{ k:'c', c:[4.8,0.35], r:0.36 }, draw(c){

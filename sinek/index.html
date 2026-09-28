@@ -108,7 +108,7 @@ body.clean.showexit .cleanexit{display:block}
   </div>
   <div class="panel">
     <div class="head">
-      <h1>Sinek beyni Dark Souls oynuyor, 50 saniyelik döngü</h1>
+      <h1>Sinek beyni Dark Souls oynuyor, 56 saniyelik döngü</h1>
       <p>Önce animasyonu oluştur ve kaydet, sonra çekim moduna geçip kendini çek. İki dosyayı Edits'te üst üste koy. <a href="uzun/" style="color:inherit">Uzun video sayfası</a></p>
     </div>
     <div class="tools">
@@ -157,16 +157,18 @@ const LINES = [
     text:'Bir meyve sineğinin beynini **Dark Souls**\'a bağladık. Karşısında oyunun ilk boss\'u var: **Iudex Gundyr**.' },
   { name:'Sinek', sp:6.8, cue:'Beynin tam haritası 2026 ▸ 166 bin nöron ▸ 125 milyon sinaps', note:'Rakamları net söyle',
     text:'Bu minik beynin tam haritası 2026\'da yayımlandı: **166 bin** nöron, **125 milyon** sinaps.' },
-  { name:'Harita', sp:6.0, cue:'Hücre tiplerinden küçük bir devre ▸ kararı devre veriyor, kod değil', note:'Kuralı vurgula',
-    text:'Haritadaki hücre tiplerinden **küçük bir devre** kurduk. Kural basit: kararı **devre** veriyor, kod değil.' },
-  { name:'Devre', sp:5.8, cue:'Göz görüyor ▸ sinyal beyinden geçiyor ▸ inen nöronlar tuşu seçiyor', note:'Elinle yukarıdan aşağı akışı göster',
+  { name:'Harita', sp:5.2, cue:'Hücre tiplerinden küçük bir devre ▸ kararı devre veriyor', note:'Kuralı vurgula',
+    text:'Haritadaki hücre tiplerinden **küçük bir devre** kurduk. Kararı **devre** veriyor, kod değil.' },
+  { name:'Devre', sp:5.7, cue:'Göz görüyor ▸ sinyal beyinden geçiyor ▸ inen nöronlar tuşu seçiyor', note:'Elinle yukarıdan aşağı akışı göster',
     text:'Göz boss\'u görüyor, sinyal beyinden geçiyor, **inen nöronlar** hangi tuşa basılacağını seçiyor.' },
-  { name:'Dopamin', sp:6.0, cue:'Vurunca ödül dopamini ▸ darbe alınca ceza dopamini', note:'İki tonu ayır: sevinç ve acı',
+  { name:'Dopamin', sp:5.9, cue:'Vurunca ödül dopamini ▸ darbe alınca ceza dopamini', note:'İki tonu ayır: sevinç ve acı',
     text:'Vurunca **ödül dopamini**, darbe alınca **ceza dopamini**. Sinek bununla öğrenmeye çalışıyor.' },
-  { name:'Sonuç', sp:9.05, cue:'5.200 dövüş, 8 zafer ▸ eğri düz ▸ beynin dışındaki ağ üçte birini kazandı', note:'Dürüst ol, şaşırtıcı sonucu bekletmeden söyle',
-    text:'Sonuç: yaklaşık **5.200** dövüşte **8 zafer**, ama öğrenme eğrisi **düz**. Beynin dışındaki bir ağ ise dövüşlerin **üçte birini** kazandı.' },
-  { name:'Soru', sp:5.6, cue:'Harita yetmiyor ▸ asıl sır nasıl öğrendiği ▸ Ve bu deney şöyle başladı:', note:'Yavaşla, son kelimeyi düşürme',
-    text:'Yani harita yetmiyor; asıl sır, beynin **nasıl öğrendiği**. Ve bu deney şöyle başladı:' },
+  { name:'Sonuç', sp:6.6, cue:'5.200 dövüş, sadece 8 zafer ▸ eğri düz ▸ beyni yetmedi', note:'Hayal kırıklığını sakla, dürüst söyle',
+    text:'Sonuç: yaklaşık **5.200** dövüşte sadece **8 zafer**. Öğrenme eğrisi düz kaldı. Sineğin beyni **yetmedi**.' },
+  { name:'Ek ağ', sp:7.7, cue:'Beynin yanına küçük bir yapay ağ ▸ aynı oyun bilgisini okudu, kararı o verdi ▸ üçte biri zafer', note:'Doruk noktası, enerjiyi yükselt',
+    text:'Biz de beynin yanına **küçük bir yapay ağ** ekledik. Aynı oyun bilgisini okudu, kararı o verdi: dövüşlerin **üçte biri** zafer.' },
+  { name:'Soru', sp:6.4, cue:'Harita yetmiyor ▸ asıl sır nasıl öğrendiği ▸ Ve bu deney şöyle başladı:', note:'Yavaşla, son kelimeyi düşürme',
+    text:'Yani harita tek başına yetmiyor; asıl sır, beynin **nasıl öğrendiği**. Ve bu deney şöyle başladı:' },
 ];
 
 /* zaman çizelgesi */
@@ -394,14 +396,34 @@ const SC = [
   for (let i = 0; i < 8; i++) disc(c,-2.8+rnd(i+50)*6.4,-.85,.08,GOLD);
   T(c,'8 zafer',-3.1,-1.02,.2,GOLD,{w:700});
   T(c,'Sinek: yaklaşık 5.200 dövüş, 8 zafer',-3.3,.25,.3,CYAN,{w:700,max:7.2});
-  T(c,'Beyin dışı ağ: dövüşlerin üçte biri',-3.3,.8,.3,MAG,{w:700,max:7.2});
-  T(c,'Son 1.800 dövüşte yüzde 28 ile 32 arası',-3.3,1.2,.22,DIM,{w:500});
+  T(c,'Sineğin beyni yetmedi',-3.3,.8,.34,'#ff6b5a',{w:700});
   glow(c,1.4,3.4,1.3,'232,195,106',.4+.1*osc(25));
   for (let k = 0; k < 10; k++) { const a = k/10*TAU - Math.PI/2, r2 = k%2 ? .5 : .75; }
   c.beginPath(); for (let k = 0; k < 10; k++) { const a = k/10*TAU - Math.PI/2, r2 = k%2 ? .52 : .85; const x = 1.4+r2*Math.cos(a), y = 3.4+r2*Math.sin(a); k ? c.lineTo(x,y) : c.moveTo(x,y); } c.closePath(); c.fillStyle = GOLD; c.fill();
   disc(c,1.4,3.4,.6,null,'#fff3cf',.04);
 }},
-/* V6 soru */
+/* V6 ek ağ */
+{ p:{ k:'c', c:[1.4,3.0], r:0.5 }, draw(c){
+  c.fillStyle = lg(c,0,-8,0,8,[[0,'#0a0812'],[1,'#1a1026']]); c.fillRect(-4.5,-8,9,16);
+  T(c,'Beyne bir ek',-3.3,-5.35,.8,PAPER,{w:700});
+  T(c,'Yanına küçük bir yapay ağ eklendi',-3.3,-4.72,.32,MAG,{w:700,max:7.2});
+  T(c,'Aynı oyun bilgisini okuyor, kararı o veriyor',-3.3,-4.32,.24,DIM,{w:500,max:7.2});
+  T(c,'Sonuç: dövüşlerin üçte biri zafer',-3.3,-3.92,.3,GOLD,{w:700,max:7.2});
+  c.beginPath(); c.moveTo(3.0,-1.7); c.bezierCurveTo(3.4,.2,1.4,1.2,1.4,2.4); c.strokeStyle = 'rgba(216,79,216,.5)'; c.lineWidth = .06; c.stroke();
+  c.beginPath(); c.ellipse(-2.2,-2.6,1.05,.75,0,0,TAU); c.strokeStyle = 'rgba(90,209,230,.7)'; c.lineWidth = .05; c.stroke();
+  for (let i = 0; i < 26; i++) disc(c,-2.95+rnd(i)*1.5,-3.05+rnd(i+9)*.9,.035,'rgba(90,209,230,.5)');
+  T(c,'sinek devresi',-2.2,-1.6,.2,CYAN,{w:700,a:'center'});
+  T(c,'+',-.6,-2.4,.7,MAG,{w:700,a:'center'});
+  const LY = [[.6,[-3.0,-2.4,-1.8]],[1.8,[-3.2,-2.6,-2.0,-1.4]],[3.0,[-2.7,-1.9]]];
+  for (let a = 0; a < 2; a++) for (const y0 of LY[a][1]) for (const y1 of LY[a+1][1]) { c.beginPath(); c.moveTo(LY[a][0],y0); c.lineTo(LY[a+1][0],y1); c.strokeStyle = 'rgba(216,79,216,.35)'; c.lineWidth = .02; c.stroke(); }
+  LY.forEach(([x,ys]) => ys.forEach((y,k) => { const on = rnd(k + x*7 + Math.floor(TT/P*40)) < .5; disc(c,x,y,.13,on ? MAG : 'rgba(216,79,216,.45)'); }));
+  T(c,'yapay ağ',3.4,-3.35,.2,MAG,{w:700,a:'center'});
+  T(c,'kazanma yüzdesi, eğitim turlarına göre',-3.3,-1.2,.2,DIM,{w:600});
+  [.2,2,5.8,6.2,13.5,28,32,27.6,30].forEach((w,i) => { const h = Math.max(.04,w*.05); box(c,-3.2+i*.78,.6-h,.55,h,.05,MAG); });
+  glow(c,1.4,3.0,1.2,'216,79,216',.45+.1*osc(25)); disc(c,1.4,3.0,.62,null,MAG,.05);
+  T(c,'karar',1.4,3.85,.22,MAG,{w:700,a:'center'});
+}},
+/* V7 soru */
 { p:{ k:'c', c:[2.3,1.0], r:0.34 }, draw(c){
   c.fillStyle = lg(c,0,-8,0,8,[[0,'#120f12'],[1,'#2b2230']]); c.fillRect(-4.5,-8,9,16);
   const n = TW(c,'Harita yetmiyor. Asıl soru: beyin nasıl öğrenir?',-3.3,-5.5,.56,PAPER,7.3,1.15,{w:700});
@@ -501,7 +523,7 @@ const SFX = {
 const EV = [];
 LINES.forEach((L, i) => { const zs = ST[i] + L.sp; EV.push({ t: zs, k: 'whoosh', d: ZM }); const it = zs + ZM - .05; EV.push({ t: it, k: 'impact', d: Math.min(.3, P - it) }); });
 EV.push({ t: ST[0] + .3, k: 'vault' }, { t: ST[2] + .25, k: 'page' }, { t: ST[4] + .4, k: 'chime' });
-for (let x = ST[6]; x < ST[6] + LINES[6].sp - .05; x += .5) EV.push({ t: x, k: 'tick' });
+for (let x = ST[LINES.length-1]; x < ST[LINES.length-1] + LINES[LINES.length-1].sp - .05; x += .5) EV.push({ t: x, k: 'tick' });
 
 /* ---------- durum ---------- */
 const $ = id => document.getElementById(id);
