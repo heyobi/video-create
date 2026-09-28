@@ -5,6 +5,7 @@
 - `index.html`: Shorts/Reels çekim sayfası (9:16, 7 sahne, 50,0 saniyelik kusursuz döngü)
 - `uzun/index.html`: Yatay uzun video kurgu sayfası (16:9, 10 sahne, 14 anlatım adımı)
 - `gezegen/index.html` ve `gezegen/uzun/index.html`: Aynı format, ikinci video: bilinen en genç gezegen Elias 2-24 b
+- `sinek/index.html` ve `sinek/uzun/index.html`: Üçüncü video: FlySoul, meyve sineği beyni Dark Souls III oynuyor
 
 ## Shorts çekim akışı (telefonda)
 
@@ -53,3 +54,14 @@ Kaynaklar:
 - Diego Portales Üniversitesi (UDP) duyurusu
 - The Astrophysical Journal Letters makalesi
 - NASA Exoplanet Archive (6.300'den fazla ötegezegen)
+
+## Video 3: FlySoul (`/sinek/`)
+
+Konu: [heyobi/flysoul](https://github.com/heyobi/flysoul) projesi. MaleCNS v1.0 meyve sineği beyin haritasından (166.700 nöron, 125 milyon sinaps; Cell 2026) kurulan bir devre, Dark Souls III'te Iudex Gundyr ile dövüşüyor.
+
+Bütün rakamlar projenin README'sindeki sonuç tablolarından alındı:
+
+- Sinek yaklaşık 5.200 dövüşte 8 kez kazandı ve öğrenme eğrisi düz kaldı.
+- Beynin dışında eğitilen sentetik ağ ("3b") son 1.800 dövüşün yüzde 28 ile 32'sini kazandı.
+
+Metin bu ikisini her yerde ayrı tutar: sentetik ağın başarısı, sineğin öğrenmesi olarak anlatılmaz. Boss çizimi, oyundaki karakterin birebir kopyası değil; genel bir silüettir.
